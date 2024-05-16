@@ -3,11 +3,15 @@
     default: () => 'FOO'
   })
   const barCookie = useCookie('bar', {
-    default: () => 'BAR'
+    default: () => 'BAR',
+    decode(value) {
+      console.log({action: 'decode', baz: value, source: 'bar'})
+      return value
+    },
   })
   const bazCookie = useCookie('baz', {
     decode(value) {
-      console.log({action: 'decode', baz: value})
+      console.log({action: 'decode', baz: value, source: 'baz'})
       return value
     },
     encode(value) {
@@ -15,14 +19,17 @@
       return value
     },
   })
+  onMounted(() => {
+    console.log(`All cookies: ${document.cookie}`)
+  })
 </script>
 <template>
   <div>
     <h1>Coookies</h1>
     <div>
-      <p>{{ fooCookie }}</p>
-      <p>{{ barCookie }}</p>
-      <p>{{ bazCookie }}</p>
+      <p>Foo: "{{ fooCookie }}"</p>
+      <p>Bar: "{{ barCookie }}"</p>
+      <p>Baz: "{{ bazCookie}}"</p>
     </div>
   </div>
 </template>
